@@ -1,0 +1,134 @@
+-- --------------------------------------------------------
+-- Hôte:                         192.168.0.100
+-- Version du serveur:           5.5.44-0+deb8u1 - (Raspbian)
+-- Serveur OS:                   debian-linux-gnu
+-- HeidiSQL Version:             8.3.0.4694
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+-- Export de la structure de la base pour orientation_PPE
+CREATE DATABASE IF NOT EXISTS `orientation_PPE` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `orientation_PPE`;
+
+
+-- Export de la structure de table orientation_PPE. club
+CREATE TABLE IF NOT EXISTS `club` (
+  `id` int(11) NOT NULL,
+  `nom` varchar(50) NOT NULL,
+  `contact` varchar(128) NOT NULL,
+  `adresse` varchar(128) NOT NULL,
+  `cp` varchar(5) NOT NULL,
+  `ville` varchar(128) NOT NULL,
+  `latitude` double NOT NULL,
+  `longitude` double NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Export de données de la table orientation_PPE.club: ~0 rows (environ)
+DELETE FROM `club`;
+/*!40000 ALTER TABLE `club` DISABLE KEYS */;
+INSERT INTO `club` (`id`, `nom`, `contact`, `adresse`, `cp`, `ville`, `latitude`, `longitude`) VALUES
+	(1, 'Association Touquet Raid', 'contact@touquetraid.com', 'Palais des sports', '62520', 'Le Touquet', 50.51874220000001, 1.60118250000005);
+/*!40000 ALTER TABLE `club` ENABLE KEYS */;
+
+
+-- Export de la structure de table orientation_PPE. edition
+CREATE TABLE IF NOT EXISTS `edition` (
+  `id` int(11) NOT NULL,
+  `description` varchar(1024) NOT NULL,
+  `id_epreuve` int(11) DEFAULT NULL,
+  `annee` int(11) DEFAULT NULL,
+  `dateEpreuve` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Export de données de la table orientation_PPE.edition: ~0 rows (environ)
+DELETE FROM `edition`;
+/*!40000 ALTER TABLE `edition` DISABLE KEYS */;
+INSERT INTO `edition` (`id`, `description`, `id_epreuve`, `annee`, `dateEpreuve`) VALUES
+	(1, 'Pour cette édition, l’évènement prendra place en plein cœur du Touquet en front de mer! Amis compétiteurs vous serez sous le feu des projecteurs !', 1, 2019, '2019-03-24');
+/*!40000 ALTER TABLE `edition` ENABLE KEYS */;
+
+
+-- Export de la structure de table orientation_PPE. epreuve
+CREATE TABLE IF NOT EXISTS `epreuve` (
+  `id` int(11) NOT NULL,
+  `libelle` varchar(128) DEFAULT NULL,
+  `description` varchar(1024) DEFAULT NULL,
+  `club` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Export de données de la table orientation_PPE.epreuve: ~0 rows (environ)
+DELETE FROM `epreuve`;
+/*!40000 ALTER TABLE `epreuve` DISABLE KEYS */;
+INSERT INTO `epreuve` (`id`, `libelle`, `description`, `club`) VALUES
+	(1, 'Touquet Raid Pas de Calais', 'Un parcours Orientation sera mis en place sur la place du Centenaire. Des parcours étudiés pour vous faire découvrir encore et toujours de nouveaux espaces naturels, de nouveaux chemins et pour vous faire profiter du superbe territoire qu’offre notre littoral avec ses plages. Mais… nous n’en dirons pas plus, le tracé restera secret et ne sera dévoilé quelques minutes avant le début de l’épreuve.', 1);
+/*!40000 ALTER TABLE `epreuve` ENABLE KEYS */;
+
+
+-- Export de la structure de table orientation_PPE. equipe
+CREATE TABLE IF NOT EXISTS `equipe` (
+  `id` int(11) NOT NULL,
+  `nomEquipe` varchar(50) DEFAULT NULL,
+  `couleur` varchar(50) DEFAULT NULL,
+  `mdp` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Export de données de la table orientation_PPE.equipe: ~3 rows (environ)
+DELETE FROM `equipe`;
+/*!40000 ALTER TABLE `equipe` DISABLE KEYS */;
+INSERT INTO `equipe` (`id`, `nomEquipe`, `couleur`, `mdp`) VALUES
+	(1, 'Equipe 1', 'blue', '1234'),
+	(2, 'Equipe 2', 'green', '5678'),
+	(3, 'Equipe 3', 'red', '0000');
+/*!40000 ALTER TABLE `equipe` ENABLE KEYS */;
+
+
+-- Export de la structure de table orientation_PPE. participant
+CREATE TABLE IF NOT EXISTS `participant` (
+  `id` int(11) NOT NULL,
+  `nom` varchar(50) DEFAULT NULL,
+  `prenom` varchar(50) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `equipe` int(11) DEFAULT NULL,
+  `mdp` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_participant_equipe` (`equipe`),
+  CONSTRAINT `FK_participant_equipe` FOREIGN KEY (`equipe`) REFERENCES `equipe` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Export de données de la table orientation_PPE.participant: ~5 rows (environ)
+DELETE FROM `participant`;
+/*!40000 ALTER TABLE `participant` DISABLE KEYS */;
+INSERT INTO `participant` (`id`, `nom`, `prenom`, `email`, `equipe`, `mdp`) VALUES
+	(1, 'Toto', 'Lucas', 'lucas.toto@gmail.com', 1, '1234'),
+	(2, 'Robert', 'Jean', 'jean.robert@yahoo.fr', 1, '1234'),
+	(3, 'Robert', 'Charles', 'charles.robert@yahoo.fr', 2, '1234'),
+	(4, 'Doe', 'John', 'john.doe@outlook.fr', 2, '1234'),
+	(5, 'Dupont', 'Jean', 'jean.dupont@gmail.com', 3, '1234');
+/*!40000 ALTER TABLE `participant` ENABLE KEYS */;
+
+
+-- Export de la structure de table orientation_PPE. participer
+CREATE TABLE IF NOT EXISTS `participer` (
+  `id_participant` int(11) NOT NULL,
+  `id_edition` int(11) NOT NULL,
+  PRIMARY KEY (`id_participant`,`id_edition`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Export de données de la table orientation_PPE.participer: ~0 rows (environ)
+DELETE FROM `participer`;
+/*!40000 ALTER TABLE `participer` DISABLE KEYS */;
+INSERT INTO `participer` (`id_participant`, `id_edition`) VALUES
+	(4, 1),
+	(5, 1);
+/*!40000 ALTER TABLE `participer` ENABLE KEYS */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
