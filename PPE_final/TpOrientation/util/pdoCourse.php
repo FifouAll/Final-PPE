@@ -3,7 +3,8 @@
 class PDOCourse
 {
 	//private static $serveur ='mysql:host=localhost';
-	private static $serveur ='mysql:host=172.19.0.2';
+	//private static $serveur ='mysql:host=172.19.0.2';
+	private static $serveur ='mysql:host=172.19.0.4';
 	private static $bdd='dbname=orientation_PPE';
 	private static $user='root' ; 
 	private static $mdp='0550002D';
